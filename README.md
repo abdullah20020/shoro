@@ -213,12 +213,18 @@ Future Development
 
 [❌] Add notifications system
 
-[❌] Electronic payment system
-
-[❌] Advanced analytics
+[❌] Electronic payment system <Payment_getway>
 
 [❌] Ratings & reviews system
 
 [❌] File and document support
+
+[❌] OAuth2.0
+
+[❌] Hangfire
+
+[❌] chat <SignalR> 
+
+
 
 Note: This project is under active development. Some features may contain bugs or need improvements.
