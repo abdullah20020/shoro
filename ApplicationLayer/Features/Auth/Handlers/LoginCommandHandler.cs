@@ -45,25 +45,26 @@ namespace ApplicationLayer.Features.Auth.Handlers
                 throw new InvalidOperationException("Invalid email or password");
             }
 
-            // Get user roles
-            var roles = await _userManager.GetRolesAsync(user);
-            var role = roles.FirstOrDefault() ?? "User";
-
-            // Generate JWT token
-            var token = _jwtTokenService.GenerateToken(user.Email, role);
+            // Generate comprehensive JWT token with all user roles
+            var tokenResponse = await _jwtTokenService.GenerateTokenAsync(user, _userManager);
             var refreshToken = Guid.NewGuid().ToString();
 
-            _logger.LogInformation("User {Email} logged in successfully with role {Role}", user.Email, role);
+            // Get user roles for response
+            var roles = await _userManager.GetRolesAsync(user);
+            var primaryRole = roles.FirstOrDefault() ?? "User";
+
+            _logger.LogInformation("User {Email} logged in successfully with roles: {Roles}", user.Email, string.Join(", ", roles));
 
             return new AuthResponseDto
             {
-                AccessToken = token,
+                IsSuccess = true,
+                AccessToken = tokenResponse.AccessToken,
                 RefreshToken = refreshToken,
-                ExpiresAt = DateTime.UtcNow.AddHours(1),
+                ExpiresAt = tokenResponse.ExpiryTime,
                 UserId = user.Id,
-                Email = user.Email,
-                FullName = $"{user.FirstName} {user.LastName}",
-                Role = role
+                Email = user.Email ?? string.Empty,
+                FullName = $"{user.FirstName} {user.LastName}".Trim(),
+                Role = primaryRole
             };
         }
     }

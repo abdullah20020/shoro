@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationLayer.Features.Spacification
+namespace InfrastructureLayer
 {
     public static class spacificationEvalator<T> where T : BaseClass
     {
